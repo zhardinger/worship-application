@@ -476,7 +476,7 @@ function renderMedia(){
         <div class="hint">MP3, WAV, or M4A — up to ${CONFIG.MAX_FILE_MB}MB. For video, use "Paste a link" above instead.</div>
         <div class="fname" id="fname">${d.mediaFileName ? "Selected: "+d.mediaFileName : ""}</div>
       </div>
-      <input type="file" id="fileInput" accept="audio/*" style="display:none">
+      <input type="file" id="fileInput" style="display:none">
       <div class="hint" style="margin-top:12px;">
         Not sure how to record a clip? <a href="https://support.apple.com/guide/iphone/make-a-recording-iph4d2a39a3b/ios" target="_blank" rel="noopener">📱 iPhone instructions</a> &nbsp;·&nbsp; <a href="https://www.rev.com/resources/how-to-record-audio-on-android" target="_blank" rel="noopener">🤖 Android instructions</a>
       </div>
@@ -511,7 +511,9 @@ function renderMedia(){
 
   function handleFile(e){ if (e.target.files[0]) readFile(e.target.files[0]); }
   function readFile(file){
-    if (file.type && !file.type.startsWith("audio/")){
+    const audioExtensions = /\.(mp3|wav|m4a|aac|ogg|caf|wma|flac)$/i;
+    const looksLikeAudio = (file.type && file.type.startsWith("audio/")) || audioExtensions.test(file.name) || file.type === "";
+    if (!looksLikeAudio){
       alert(`This upload is for audio files only. For a video recording, please switch to "Paste a link" above instead.`);
       return;
     }
