@@ -69,6 +69,7 @@ h1,h2,h3{font-family:'Fraunces',serif;margin:0;}
 
 .field{margin-bottom:18px;}
 .field label{display:block;font-size:13.5px;font-weight:600;margin-bottom:6px;color:var(--text);}
+.hint a{color:var(--teal);font-weight:600;text-decoration:underline;}
 .field .hint{font-size:12.5px;color:var(--muted);margin-top:5px;line-height:1.4;}
 input[type=text],input[type=email],input[type=tel],input[type=number],textarea,select{
   width:100%;
@@ -328,6 +329,7 @@ function validateStep(n){
   if (n===5){
     if (d.mediaMode==="file" && !d.mediaFile) errs.media = "Please upload a file, or switch to pasting a link.";
     if (d.mediaMode==="link" && !d.mediaLink.trim()) errs.media = "Please paste a link to your recording.";
+    // no validation needed when mediaMode === "skip" — skipping is allowed
   }
   if (n===6){
     if (!d.refName.trim()) errs.refName = "Please provide a reference name.";
@@ -461,6 +463,11 @@ function renderMedia(){
     <div class="check-grid" style="margin-bottom:16px;">
       <div class="check-item ${d.mediaMode==='file'?'checked':''}" id="modeFileBtn"><span>🎙️ Upload an audio file</span></div>
       <div class="check-item ${d.mediaMode==='link'?'checked':''}" id="modeLinkBtn"><span>🔗 Paste a link (required for video)</span></div>
+      <div class="check-item ${d.mediaMode==='skip'?'checked':''}" id="modeSkipBtn"><span>⏭️ Having trouble — skip for now</span></div>
+    </div>
+
+    <div id="mediaSkipZone" style="display:${d.mediaMode==='skip'?'block':'none'}">
+      <div class="summary-block"><p style="margin:0;">No problem — you can finish the rest of your application without a recording. Kim will follow up with you directly about sharing one, or you're welcome to simply sing or play for her at your audition instead.</p></div>
     </div>
 
     <div id="mediaFileZone" style="display:${d.mediaMode==='file'?'block':'none'}">
@@ -470,6 +477,9 @@ function renderMedia(){
         <div class="fname" id="fname">${d.mediaFileName ? "Selected: "+d.mediaFileName : ""}</div>
       </div>
       <input type="file" id="fileInput" accept="audio/*" style="display:none">
+      <div class="hint" style="margin-top:12px;">
+        Not sure how to record a clip? <a href="https://support.apple.com/guide/iphone/make-a-recording-iph4d2a39a3b/ios" target="_blank" rel="noopener">📱 iPhone instructions</a> &nbsp;·&nbsp; <a href="https://www.rev.com/resources/how-to-record-audio-on-android" target="_blank" rel="noopener">🤖 Android instructions</a>
+      </div>
     </div>
 
     <div id="mediaLinkZone" style="display:${d.mediaMode==='link'?'block':'none'}">
@@ -480,6 +490,7 @@ function renderMedia(){
   `;
   document.getElementById("modeFileBtn").onclick = ()=>{ d.mediaMode="file"; render(); };
   document.getElementById("modeLinkBtn").onclick = ()=>{ d.mediaMode="link"; render(); };
+  document.getElementById("modeSkipBtn").onclick = ()=>{ d.mediaMode="skip"; render(); };
 
   if (d.mediaMode==="file"){
     const box = document.getElementById("uploadBox");
@@ -587,7 +598,7 @@ function renderReview(){
     <div class="sub">Take a look before you submit.</div>
     <div class="summary-block"><h4>Contact</h4><p>${escHtml(d.name)} — ${escHtml(d.email)} — ${escHtml(d.phone)}</p></div>
     <div class="summary-block"><h4>Role(s)</h4><p>${d.roles.map(escHtml).join(", ")}</p></div>
-    <div class="summary-block"><h4>Recording</h4><p>${d.mediaMode==="file" ? "📎 "+escHtml(d.mediaFileName) : "🔗 "+escHtml(d.mediaLink)}</p></div>
+    <div class="summary-block"><h4>Recording</h4><p>${d.mediaMode==="file" ? "📎 "+escHtml(d.mediaFileName) : d.mediaMode==="link" ? "🔗 "+escHtml(d.mediaLink) : "⏭️ Not provided — will follow up directly"}</p></div>
     <div class="summary-block"><h4>Reference</h4><p>${escHtml(d.refName)} — ${escHtml(d.refContact)}</p></div>
     <div class="summary-block"><h4>Audition time</h4><p>${d.slot ? formatDateLabel(d.slot.date)+" at "+d.slot.time : "—"}</p></div>
     <div class="actions">
