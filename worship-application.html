@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Request an Audition — Worship Team</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   CONFIG NOTE: search this file for "EDIT ME" to customize.
+   The one you MUST change before going live is BACKEND_URL
+   near the bottom of the <script> section.
+   ============================================================ */
+
+:root{
+  --ink:#1C3A4C;
+  --ink-deep:#10242E;
+  --paper:#FBF6ED;
+  --paper-dim:#F1E9DA;
+  --amber:#FDC70D;
+  --amber-deep:#CFA30B;
+  --teal:#24506B;
+  --text:#22303A;
+  --muted:#5B6B74;
+  --danger:#B0453A;
+  --line:#E4DBC9;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  min-height:100vh;
+  font-family:'Inter',system-ui,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(ellipse 900px 500px at 50% -10%, rgba(227,168,87,0.18), transparent 60%),
+    var(--ink);
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  padding:48px 16px 80px;
+}
+h1,h2,h3{font-family:'Fraunces',serif;margin:0;}
+.wrap{width:100%;max-width:640px;}
+.masthead{text-align:center;color:var(--paper);margin-bottom:28px;}
+.logo-badge{width:96px;height:96px;margin:0 auto 16px;border-radius:50%;overflow:hidden;box-shadow:0 10px 26px rgba(0,0,0,0.4);border:3px solid rgba(255,255,255,0.92);}
+.logo-badge img{width:100%;height:100%;object-fit:cover;display:block;}
+.masthead .kicker{color:var(--amber);font-size:14.5px;margin-bottom:8px;font-weight:500;font-style:italic;font-family:'Fraunces',serif;}
+.masthead h1{font-size:34px;line-height:1.15;font-weight:500;color:var(--paper);}
+.masthead p{color:#C9D8E0;margin-top:10px;font-size:15px;line-height:1.5;}
+
+.wave{display:flex;justify-content:center;gap:3px;margin:20px 0 0;height:20px;align-items:center;}
+.wave span{width:3px;background:var(--amber);border-radius:2px;opacity:0.85;}
+
+.card{
+  background:var(--paper);
+  border-radius:14px;
+  box-shadow:0 30px 60px -20px rgba(0,0,0,0.5);
+  overflow:hidden;
+}
+.progress-track{height:4px;background:var(--paper-dim);position:relative;}
+.progress-fill{height:100%;background:var(--amber);transition:width .3s ease;}
+.progress-label{display:flex;justify-content:space-between;align-items:center;padding:16px 28px 0;font-size:13px;color:var(--muted);}
+
+.step{padding:12px 28px 32px;}
+.step h2{font-size:22px;font-weight:500;margin-bottom:6px;}
+.step .sub{color:var(--muted);font-size:14px;margin-bottom:22px;line-height:1.5;}
+
+.field{margin-bottom:18px;}
+.field label{display:block;font-size:13.5px;font-weight:600;margin-bottom:6px;color:var(--text);}
+.field .hint{font-size:12.5px;color:var(--muted);margin-top:5px;line-height:1.4;}
+input[type=text],input[type=email],input[type=tel],input[type=number],textarea,select{
+  width:100%;
+  border:1.5px solid var(--line);
+  background:#fff;
+  border-radius:8px;
+  padding:11px 13px;
+  font-family:inherit;
+  font-size:14.5px;
+  color:var(--text);
+}
+textarea{resize:vertical;min-height:90px;}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--amber);outline-offset:1px;border-color:var(--amber);}
+
+.check-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media (max-width:420px){.check-grid{grid-template-columns:1fr;}}
+.check-item{
+  display:flex;align-items:center;gap:9px;
+  border:1.5px solid var(--line);border-radius:8px;padding:10px 12px;
+  cursor:pointer;font-size:14px;background:#fff;
+}
+.check-item input{width:16px;height:16px;flex:none;}
+.check-item.checked{border-color:var(--amber);background:#FCF3E4;}
+
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media (max-width:480px){.row2{grid-template-columns:1fr;}}
+
+.upload-box{
+  border:1.5px dashed var(--line);border-radius:10px;padding:22px;text-align:center;
+  background:#fff;cursor:pointer;
+}
+.upload-box.dragover{border-color:var(--amber);background:#FCF3E4;}
+.upload-box .fname{margin-top:10px;font-size:13.5px;color:var(--teal);font-weight:600;word-break:break-all;}
+.or-divider{display:flex;align-items:center;gap:10px;margin:18px 0;color:var(--muted);font-size:12.5px;}
+.or-divider::before,.or-divider::after{content:"";flex:1;height:1px;background:var(--line);}
+
+.slot-date-group{margin-bottom:16px;}
+.slot-date-group h3{font-size:14.5px;font-weight:600;margin-bottom:8px;color:var(--text);}
+.slot-list{display:flex;flex-wrap:wrap;gap:8px;}
+.slot-btn{
+  border:1.5px solid var(--line);background:#fff;border-radius:8px;
+  padding:9px 14px;font-size:13.5px;cursor:pointer;font-family:inherit;
+}
+.slot-btn.selected{background:var(--teal);border-color:var(--teal);color:#fff;}
+.slot-empty{color:var(--muted);font-size:14px;padding:18px 0;text-align:center;}
+
+.read-box{max-height:210px;overflow-y:auto;border:1.5px solid var(--line);border-radius:8px;padding:14px 16px;background:#fff;font-size:13.5px;line-height:1.65;color:var(--text);}
+.read-box h4{margin:0 0 10px;font-size:13px;font-weight:700;letter-spacing:0.01em;}
+.read-box p{margin:0 0 10px;}
+.read-box ul{margin:0 0 10px 18px;padding:0;}
+.read-box li{margin-bottom:5px;}
+
+.summary-block{border:1.5px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:12px;background:#fff;}
+.summary-block h4{font-size:12.5px;text-transform:none;color:var(--muted);margin:0 0 6px;font-weight:600;}
+.summary-block p{margin:0;font-size:14.5px;line-height:1.6;}
+
+.actions{display:flex;justify-content:space-between;align-items:center;padding-top:8px;}
+.btn{
+  font-family:inherit;font-size:14.5px;font-weight:600;
+  padding:11px 22px;border-radius:8px;border:none;cursor:pointer;
+}
+.btn-primary{background:var(--amber);color:#2A1B08;}
+.btn-primary:hover{background:var(--amber-deep);}
+.btn-primary:disabled{opacity:0.5;cursor:not-allowed;}
+.btn-ghost{background:transparent;color:var(--muted);}
+.btn-ghost:hover{color:var(--text);}
+
+.error-text{color:var(--danger);font-size:13px;margin-top:6px;}
+.agree-row{display:flex;gap:10px;align-items:flex-start;border:1.5px solid var(--line);border-radius:8px;padding:14px;background:#fff;}
+.agree-row input{margin-top:3px;}
+
+.confirm{text-align:center;padding:44px 28px;}
+.confirm .icon{font-size:40px;margin-bottom:12px;}
+.confirm h2{font-size:24px;margin-bottom:10px;}
+.confirm p{color:var(--muted);font-size:15px;line-height:1.6;}
+.confirm .slot-echo{margin-top:18px;background:var(--paper-dim);border-radius:8px;padding:14px 18px;font-size:15px;font-weight:600;color:var(--teal);}
+
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(0,0,0,0.15);border-top-color:var(--ink);border-radius:50%;animation:spin .7s linear infinite;margin-right:8px;vertical-align:-2px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.footer-note{text-align:center;color:#8B81A0;font-size:12.5px;margin-top:22px;}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="masthead">
+    <div class="logo-badge"><img id="logoImg" alt="Wills Valley Community Church logo"></div>
+    <div class="kicker" id="churchKicker">"Changed Lives, Changing Lives"</div>
+    <h1>Request an Audition for the Worship Team</h1>
+    <p>Tell us about yourself, share a recording, and pick a time to audition in person.</p>
+  </div>
+  <div class="wave" id="wave"></div>
+
+  <div class="card">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label">
+      <span id="stepLabel">Step 1 of 7</span>
+      <span id="stepName">Basic info</span>
+    </div>
+    <div class="step" id="stepContainer"></div>
+  </div>
+
+  <p class="footer-note">Questions about your application? Contact <span id="contactEmail">worship@gracecommunity.org</span></p>
+</div>
+
+<script>
+/* ==========================================================
+   1. CONFIG — EDIT ME
+   ========================================================== */
+const CONFIG = {
+  // Paste the Web App URL you get after deploying the Apps Script
+  // (see the setup guide). Leave the placeholder in and the page
+  // will run in local "demo mode" with fake slots, so you can test
+  // the flow before your backend is ready.
+  BACKEND_URL: "https://script.google.com/macros/s/AKfycbyR3SpHC06odd1U-37wrPHEAIxUBV0QFSdpjpStwYrkSKy5LfGpkj2ZIqIWnX76hkZdrg/exec",
+
+  CHURCH_NAME: "Wills Valley Community Church",
+  CONTACT_EMAIL: "kshrad@yahoo.com",
+
+  ROLES: [
+    "Vocalist", "Acoustic Guitar",
+    "Electric Guitar", "Bass Guitar", "Drums", "Keys / Piano", "Sound / Tech"
+  ],
+
+  AGREEMENT_TEXT: "I affirm my personal faith in Jesus Christ and my desire to serve God through music. I understand that serving on the worship team involves regular rehearsal commitments and a posture of humility and teamwork, and I agree to uphold the values of our church community.",
+
+  // Max upload size before we ask the applicant to paste a link instead.
+  // Kept modest because the file travels as base64 text to the backend.
+  MAX_FILE_MB: 8,
+
+  // Required reading shown on the very first screen. Applicants must
+  // check a box confirming they've read both before they can continue.
+  // Edit the wording freely — lines in ALL CAPS become bold headings,
+  // and lines starting with "*" become bullet points.
+  INFO_TEXT: `WILLS VALLEY WORSHIP TEAM INFORMATION:
+Being a part of Wills Valley's Worship Team is a big commitment to the Church and to the team. There will be a time commitment to practicing with the team (times set by leader), commitment to practicing your vocal part(s) and/or instrument(s) throughout the week, commitment to nurture and develop your gifts continually, commitment to being punctual on Sunday mornings for practice, commitment to being a part of the community of our Church, and possibly other commitments specified by the worship leader. Please take some time to pray if this ministry is where God is leading you to serve. If there is any reason that you will not be able to make these commitments to the worship team, then please consider applying later on in the future when you are able to make a commitment. You must be a member of Wills Valley Community Church to be considered.
+Being a part of the team requires character. The fruit of the Spirit should be evident in your life. We are leading people to worship Jesus so your life must be lived in a manner worthy of the Gospel and this calling. None of us are perfect, but real, authentic fruit should be growing. The dedication that is required to represent the church on a platform can be stressful at times, so everyone must be able to communicate effectively, humbly, and in a considerate manner. It is expected that you lay your pride down at the door. Team members do not request solos or songs-they submit songs to the leader as suggestions, which the leader then decides which songs to bring to the team. The leader also determines who will be best suited for solos and leading each song based on the good of the team as a whole and not preferences of individual members. Our goal is to bring glory to God through undistracted worship, not appease egos.
+This application has been prayed over and thought through for the church's and the team's benefit. It is a way to find out more about you and your musical gifts, to give you an understanding of the expectations and commitments that you will be making, and to help us determine if you will be a good fit for the Wills Valley Worship Team. Please complete the following application and submit it. Completion of this application does not guarantee a position on the worship team. At the end of this application, you will be able to select an audition time with Kim (don't worry, it isn't as stressful as you may think!). This way Kim can evaluate your musical gifting, and further expound the vision, mission, and desire of the team. The leadership (and at times, along with pastoral input) will decide your acceptance onto the team. After acceptance, if for any reason the leadership feels you are not meeting the requirements set forth for the team, you may be asked to step down for a season or permanently. Our aim is to not sacrifice authentic Christ-centered living for musical talent. Our mission is to bring glory to God by knowing Him and making Him known to others.
+*Vocals must be able to sing at least one harmony part in addition to holding down a part while someone else is singing lead.
+*You must be at least 16 years old to request an audition/interview. If you are still in high school, please see Kim to discuss expectations.
+*You must be a member of Wills Valley Community Church to be considered.`,
+
+  EXPECTATIONS_TEXT: `WILLS VALLEY'S WORSHIP TEAM MEMBER EXPECTATIONS:
+* Team members are to be growing in their love and trust in Jesus Christ, as well as their understanding of what it means to be a Christian.
+* Team members are to set an example to others in public and private.
+* Team members are to be punctual and ready to all worship ministry activities, including practice and corporate worship.
+* Team members are to honor, listen to, and support the leader during practice.
+* Team members are to receive correction and/or direction with a humble heart.
+* Team members are to give Kim Hardinger as much notice as possible whenever they are unable to serve.
+* Team members are to practice on their own and seek to grow in their gifts.
+* Team members are committed to resolving conflict in a Biblical manner.
+* Team members are to communicate concerns to Kim Hardinger in love without slander or pride and will not spread their concerns as an act of gossip.
+* Team members are to dress appropriately and will not wear anything that might potentially distract others from worshipping.`
+};
+
+document.getElementById("contactEmail").textContent = CONFIG.CONTACT_EMAIL;
+document.getElementById("logoImg").src = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCADwAPADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD9U6KKKACiiigApuB606m4oE7ingU04pjuVcZbg9iOK5zxv8RPD/w60d9X8R6taaNpkYOZ7yQLuPoo6k+1PkctiXOKXvM6WThD8+z3rJ8QeI9M8OWTXWq31rp9oOsl5KI1/M18MfGf/gpTI89zpXw50vao4XWNSXBk94oz0+r/AIV8beOPiV4s+Jl2914l1y/1i7di3lzSE26D0Cfd/Su+lgpy+I86tjo0/gP0v8e/t+/C7wazxaffXXie8A+WLSIt0efdn2gfhmvnjxh/wUv8Waj50XhvwzZaMhPyT3chuJMe6kBfyNfGagKCBwp/h/h/LpSKioMKMD07flXqwwdCO6PInjq0tmez+IP2x/i/4jcmTxtdWSjO5dPVYcZ9gDmvPtW+K/jDxA7/ANo+KtZ1JX++1xNn9MVzJO054FIz92Ix/tHiu6FKnH4djhlXnJ+9uS3d/c35zM81z7yyUWl/c2BzA81sfWJ6Yj/3VRvpQ7/3lRfrWt47GV5bnS6T8V/GHh90/s7xVrOnKn3Gt5sfpivQfD/7Y/xe8OODH42ur1TjauoKs2cexAxXi6uOqkf8BPFKDuOeDWU6UJL3jWNecX7u59m+D/8Agpf4s07yYvEnhmy1lM/PPayG3kI9lAK/ma+h/AX7fvwt8ZOkOoX1z4YvCOYtXi2x59mTcD+OK/KtkDjBGR6dvypSN2AeQP4f4fy6VwzwdCWyO6GOrR3Z+6+h+ItM8SWS3WlX1tqFo3SS1kEi/mK04+UB3BvcdK/DnwN8TvFvw0uku/DniC80edGDKIZT5EnsYz8v6V9l/Bj/AIKTyRTW2lfEfSlIOA2saWN3l/7UsY6/VPxryquCnD4T16OOjP49D78GKcMEVzHgj4h6B8RdHj1fw5qtprOmSAET2kgbafRh1B9q6JH3OcOWA7Y4rg5HHc9FTi/hZJgetOpuKdSKV+oUUUUDCiiigAooooAKQmgnFDNgUbC30DPFQNN5YOeSOcen1qLU9Ws9Hsbi8vrmO0tbeMySzTNtRFHUkmvzf/al/bmv/G8Vx4Z+HN5Np+gjMc2sAFJ7wdCqZ5SP6/Ma3o0ZVpWRz1sRGhH3j3T9o/8Abv0D4Xz3uheFBF4i8UofKJ3Zs7VsdXYfeI9Bivzw8e/E/wAT/FHXZtV8UavNql6+ch+I4gf4Y06Kv55rmkjA83fKzK/Oxfus3fdmolJQEydem/19BX09DCRp2fU+Yr4mVW93oOKKVUFRgHkBc5/wpIY2MUxDbQ38KvlR9DTjgvEhOXmO2JQCS7eigcsfYV9D/Br9h/4ifFiKG+v4G8H6FIMte6kgE8w/6ZxfeX/gQFXUrxpbswo0Z1HpsfO87+QiswPzdu/5V0nhL4deKvHl0lv4d8N6prUjdDZ2zFR/wJsCv01+Fn7CHwx+GpiurrTn8W6uhz9t1g7lB/2YvuivoS1sLbTrOK1s4I7a1jGEghUIqD2Ary6mYL7KPUpZXf4pH5beF/8Agn18W/EaiS9tdN0CLjC3t1+9OevygHp9a9P0T/gl9qReJ9V+IMFt13x2mn+YenYlhX6AKgVTtPln0HOachcrhiCf1rilja0tmejHLqEdGrs+IIv+CX2iN/x8ePtUkP8A0ztVT+tJL/wS/wBEH/Hv4+1SM/8ATS1V/wCtfcHSmAg9DWX1qonZyNfqWH6qx+f+tf8ABL/Ug8r6X8QIbn+7Hd6f5Z6d2DH+VeY+KP8Agn18WvDqGSxtdN1+IZyLK6/e8dPlIHX61+p7F9vynH1zSMg2DcfMJ7HHFaLG1odbmEsuoS+E/EHxZ8OvFXgS6e38R+G9U0SRepvLZgv/AH0uRXOwN56My5wvUcZ/Kv3au7K21GyltbyGK5tZBh4JgHVx6EGvnr4p/sI/DH4kma6tdOfwnq7nP23RjtUn3j+6a7qOYwlpU09Dgq5Xb4WflPIjokT/ALtiOqscIf8AClCKFYKoAJyAVxivoj4x/sO/EX4VR3F7p8DeMNDhGReaco+0Qj/ppEfmf/gINfPQUBpUGN0J2yr0KN6MDyp9jXrU61Op8LueVOlKPxHUfD/4o+J/hXrcereGNXm0u6QjOz5o5cfwyJ0K+/av0R/Zv/bq0D4pPZaJ4qEXhvxS5EQO7/QrxsdYnP3T7H86/MbOYyVGWPAb09abloQpSVl28kt/Ee3Hb8KxxOFhVTlbXyOihiJUbJPQ/efz9wBAJJ5GO/0qftX5r/sqft0X/guK38M/EW8lv9CGEt9ZILz2g6BXA5eMev3hX6O6dqlpq1nBd2VxHd2s8YlimhbcjoehBHWvma1GVF6o+no4iNePulsGlpqMHGR0pQc5rDc6NhaKKKBhRTR0NAoFfWwpxVTVdUtdF065v72eO2tLdDJLNKwVI0HJZiegHUmpZflwxIGO/pX5tftzftSjx5qt58PvC12H8O2cgGq3ULf8fcynIjB/55qRn3YCt6NF1pJHPiK8aEeY5j9rz9ru7+M2oTeGPDUs1n4JtZf9bkq+pMD99/SMH7o79T2r5jeTNDyc5pDtePACtGy5RG+6y+tfVU6UKUUkj5KtWdZ3bFU5UGu7+EXwS8V/HHxCdJ8L2Bn8oq11ezZW1tVPQyHuTg4UcnFeg/sv/sm6z8fdR/tG8MukeC7dsTagq7XuMdY4Ae/Yt0H1r9Q/h54B0L4a+GLXQvDunQ6XpduMRwQD7x7ux6lz3JrhxWM5fdjuduEwTnaUnoeRfAf9jrwV8GEh1CW2j8QeKiAJNWvowyRNjkQoeFHb19698VVTKsHaQ8MR8zEe/oKmorwpzlN3bPpIUowVkgoo60YFY3UVeRqoxW4ZozjmmO/lkHqOhX1rnfFnjSy8LWrZTz53xtgQ9T/9auHHZhhstoPEYmSjBdWbUqUq8+Smrs6KSQL1IHuTiuS1b4m6RpA2pN9tm7JbLuH515d4j8U6hr8pM1xi2PSBPuj61kV/P+d+J9ZydPLaaUf5nq38uh9nheHbrmxD+R6Bd/GG9O5YbCOD03vuIrJf4p6/IxKXEKD0MdcrRivzCrxjntZtyxMlftofQwyjBQjbkudUnxQ8QqwLXMBHceXWna/GG/iXE1vDOfUHbXBUUsPxjn2HleOKk/UbyjBPeB67pnxO0m/ZFuDJp9wPl3TDIPsGHBrzD45/sfeB/jfDLqVlbxeHvE23MOq2CgJK2OBMg4Yfr71nl8dq1NE8SX2gTLNaXG1QcvAx+V/rX6fkfinjqNZU8wimu60PnMw4ZpVIN0fuPza+LPwR8W/A3xCdI8VWPk+aWa1vYMta3SjqYz2IyMqeRmuHI3DFfslqMXhb44eG7rw14k0yK5tp0y9rN0J/vxt1DjsRX5x/tOfsp61+z/fyapAz654LuX22+ospZ7TniO4A79g3Q/Wv6hyTPsJnNFVMPNO5+R5jlVbByaktEeECUw9K+ov2Qf2vrz4PahD4Z8SSzXngq5l4lJLNprE/fXuYieo7dRXy8+0zIjAAhclf7q+1JEfJOa9+pThVi4TWp51Gq6VpJn7yaXqNtq2n297ZTx3NpcIJYpomDLIp5DAjqCOatDFfmx+wr+1SPBer2nw78S3QXQbyQjS7mVuLSZjkxMT0jYnOezE1+kMIyCc7jnkjvXytak6Mmj6zD14148xPRTD1pR92ue50dRcgCoZGfzeB8oXP1PpUmeK5f4keO9O+G3gnWPEmruEsNPt2lcbsGQ4+VB7k4Aqoe87EzaUXI+c/27/2jH+Gvg4eE9Dv/I8Ua5GRvQ4+y2/8TMeoZug+hr8x40zCJA52sxGHGHJ9D7d66b4keP8AVPij421bxPq8gkv9QlLFGO5I4/4EUegGOfrXKspj2uSzsWG89Sx6ZHpgV9bhMMqcNdz5LE1/aybvoSFAeor3r9lD9l+9+PniP7ZqSvaeCdPcLeTqMfaHXn7PCe5/vHsM98VwPwT+EWrfHH4i2XhbRsxox8y91ApuS0gB5cjuT0A7mv2E8CfD3RPht4U0/wAO6BaLZ6XYxiOKMdSe7se7MeSe9ceMxPJ7sHqb4LCc7cpbGloGhaf4f0ay07TbOGxsLWIRQW8C7URB0GP5+9aROTnvQTk80V4D97Vn08YqCsgooooKCmSOVZcdOp/wp4qhrV/Hpenz3Eg+VELDJxubsK5a1aOGjOtU2ir/AHFKHtKiic/478bDw1ZmG3xJqEoykQ/hHrXjF5dyXsrTSs807nLyMfu+wq3qmrzazfSXlyM3D8Bs/dXstUsnGONg6DuK/jHi3ietxBi3aX7pbLp8z9TyvAQwdNOUfe6jUUKP84p1Bor4R2voe3fW7YUUE4pASeoxSukWtRaKKKG7K7EBGaaEAOR+tKAR3zS001a0tSVePUXzWjdHVzHIpyjqcFT7V6foGtab490G88O6/aQ3yXEJgmhuFGyZD2I9uvsea8vwpHzLu9Kkgu7i0uILmCXy7iFtyuB19sV9lwvxDieHcXGrGT9l9qPfzXmeTmWX08fScWtT4n/av/Zjvf2fvFBn0uF7zwZqDH7HdtljbsTk28jevoe4x3rwhgG681+02t+GdF+M/wAPbzRNbtFudO1GHyp0zyjY4ZT2YHkGvyS+NXwi1n4I/EK98LaspmMZMlpehdqXVuT8kg9D2I7HHrX985TmlPMcPTqp/Ek0+6Z+AZlgZYeq4paI4P5Ycy7mGzjEY+dR13D8e1fp/wDsL/tI/wDCz/B58Ka3eed4q0SFf3rHP2216JKPVh0P4V+YMZDpu2skqvvVuhUjjB9R7V1nwu+IGo/Cvx3pPinSGCXdhNu8pW2pJEfvxH2Iyc/SvSxeHVSPu7nJhq/spJ30P28R3LpkADHODnn0qfoK5n4eeNtO+Ing7SPEWkuJNP1G2WeMg5K5HKn3HSukz8tfJVE4uzPrYO8VINwGc9q/P7/gpJ8ZZbnVNK+G2l3O2JU+36ltJwzD/VxH6cPX3X4j1u38N6DqOq3J22thbvcOSeCqqWP8q/E34l+O5/iR4/1rxNdTM8uqXbTAMf8AVRfwKP8AgOK9DBUuefMedjq3s48i6nN5XG/GOBubtn0FCFpGVIonnlYDZCvDOScADPcmmeWSGGN7MTtT1x0P4c19G/sQfB3/AIWv8ZbXUr+JZtB8NML65J6SzkYhT3xw2Pavo69T2ULnzlGi6k7dD7a/Y8+AifBb4XxS6jBG3inV0W61J0xlVIykQ9lB/PNfQFRwIFYdnzgvjg98VJXyM6jnJtn2VKChFJBRRRUmoUUUUBcXFea/FvVyFt9NRypY+a4HoK9GL8V4b8VdSL+L72PPFvEoH4jNfm3H1atTySdOg/fm1H9X+B7mSUlWxlpdDmkZnd+OM8U/afSq/nbEU/3uaT7Sfav5UeT4h6xWh+pe1i9iztPpQVI7VX+00n2n6U45RiI6Xsxe0V9CUyqGwetOzzgZJ/2ecfXFcV8Rfi34e+Fumpe61OTK/wDqbCHmW59wO2KxfBv7RHgvxr5a2mqjTLpjzZal+6c56AHvivVhwjmtWi6/svdXU8+eZYSFVUlL3meod8d6Kga4VjGylSrjIMbblP40vnV5cslxUHyyR6EK0Z6omxS7TUHn0hucGo/sbE9h+0iWNp9KaRgjPrUH2mkNxux9acclrp+/1Gqibsej/CHWHtr+bTJGyr5kTPc9xXJftm/AY/GP4ayXukwq3irQVa6sHbGZkwfMhOexHP1UUvgzUzY+K7Bh/wAtJhD+de/mMSgZ5ki+UN2PtX9SeG+IrwylUa796Df3dD8t4hw8FXfmfhDIywZDB0I+8rD5gc4IPvnPFOYqHKOCMqQXB+7X0D+238HP+FT/ABmvbuwiEOgeJN2oWpHSK4PEqfTOT+NfPiuGVpGGx2J3J6Yxk/jmv36jU9rFM/K61F0526H3p/wTY+M8nmap8ONUuMgL9u0tTnAU/fjH6tX3wzqFBzx9K/D/AOF3ji7+GHxH0HxLZSskmmXKMVB4khP+sB/4Dmv2w0DWYNf0Oy1O0YPb3kCTxH1VgGH86+extLknzdz6PBVuePJ2PnL/AIKDeOW8K/AW50qKRRceILpLDbnBEWC7H8NgH41+WbMHO4cDAx9K+xP+Cl/jA6v8SPD3huOU+XpliZpox03zEFT9cKa+OzgHA6Dj8q9XBw5KCZ5GOnzVmhjOImV9u4jIA/z9K/V39hj4Xn4a/AnSZriLy9V8QMdVugRyqP8A6pfwUivzJ+GvhKbx58QvDXh235l1LUYbfGP4c7mP5Kfzr9trGyt7C0gtrVVit7dFhijXoqqMAVhmVT4Ym+V0r80iwKTNLTRkOGLBo+nJAx9a8J8t9T6NRfKrDqjlj3shJYKO6nBz6fT2phkkAwqFznOfu8Z6c96+Pv2uP214fA8l14K8A3Ed74mdTHd6qhDRacG4wh6NN6Z4HeuilRlWko01qc9avChFzmzp/wBrD9sHT/gtbHw74dMOqeOJU4V2LQ6fngPKRn5znhfzr4V8B/tYfE/4aaxe6nbeK59SF3c77iw1ZvOgkkY87VP3B/u5q18Bv2c/Fv7R3jC5uVlubTQUmDap4iunZmmkzzsY/wCskboTyBmv0n0P9mP4ZaN4GtvCTeE9PvdNgX5Tcxhp2c9SZPvBj7GvTk6GEjyz95njpV8bK8NEeOfCL/god4N8WTQ6b41s5/BeqEbFlc+ZYyH2Ycj8RWv8QfEVlqXi6/nsr1NQtJPLeOW0lV4mBQdwa5P4if8ABNfwpqLXE3grWbvw7NJyLG+/0i2b8T84/Ovm7xN+zj8bvgFtubHT7i60+Ekm70OQXEBXOfmiOSor57Ocqw2cYdU4Pll2Pay/M62X1V7SHNHufT41ZVGNwPsvQUf2osmVwGz2NfM3hP8Aaet57n+z/ElsbDUFwrTRIdo9S0f3h9eletW/jPTLvSZNUh1SzOnxLukuxIGjQepI7/7PUnivzmvwtVoO043P07DZthcTH2kJ2O9TVm2xoirO4PzmI4K1498Wf2l7HwZJcaX4b8vWNe5Mjytvgtv94/xt7dPevJ/iR+0De+IDPpHhp5LbTX4kukXE917hRyi/XmvWf2af2D9Q8bm38R/EOCbS/D8oE0Gj52XN6vUFz/yyi/2T81fQ5bwlhKDWJxuseke58fmfEE60nhsCrS6y7Hknwk+Bnjv9qHxZPewO5slcm/8AEOoMTBGT/DH3JA4CqCvHJr1Lxz/wTc8eaNCzeGdf0zxRagFljnX7PPn2A45+tfo34e8PaV4Z0a10zSNOttN0+3jEcVtbRhEVR2x3+vfrWkY0I+6vHTI6V9z9b9klChHlh2Pk1gKdW8qrvU7n46rH8ZvgDO0F/pfiHSYITzFcxG5tXHTjBIx+NeieCv2yEkT7P4n0nDLwb7SnBA/3o88Gv0+ubOK6geCZUmhf70cyiRSPoeK8j+IH7I3wm+IkjXGreELK1uWOTPpebZm+ojwDXl4nLstx7viaCXmtzuoV8dg9MLXv5HxL4h/bS0WxnU6XoFxdLG22Wa5uBDkeqr1P4ivSPA3xw8OePo4f7O1AxX7rl7G8YRSKfTPRvavp/wAJ/sr/AAr8FwNHYeCNMwy7S94hupMf70mT+teTfFf/AIJ5eBPGM0mpeFbi68Haru3J9lzLAX9SDlkH+6RXi1eG8pnFxpRsetSzjHxnzVnczX1Pa5VwY2HVDxikOrrGM5ryHX/Avxw+ADLFrulHx74aiBIvtLQySRoPb72f978KueDfidpHj6GQWF06TQkGawuYyl1Gc9GWvk8TwtGk/c2PscHnOHxkowcrT6ntPg68+1+LdCgXqbtTX1av3RXyR8DYX1v4kWSupK2G+5ZvUAfJz09R+FfW4NfU5NgPqVOXnY8HPantKtrbHzn+3d8MD8Q/gVqd5bReZqegMuqW+ByY1/1y/igNflPFIJB8q7R1OfU1+7eq2Ftqum3djdxCa1uYjDLGejBhgj8q/EXx/wCFrjwN478ReHLpCk2l381vgjtuyP0YV+gZfU0cT85zSlblkYGzzBtzgdz7V+q37AfxA/4TT4DWNjM4N5ocz6e6552D5lP47sfhX5Usu5SPUV9n/wDBM3xh/Z/jvxP4bmmO3UbWO6hj7b4ySx/Ij8q3xkOag2YYGfLWSPFP2wPED+IP2j/Gsrc/Z7wWKNuzxGBt/ma8ZUlQc8nJJ/Oui+ImsNr/AMQPE+pSNvNxfy3QY984xXOFhgHPUbq7qUFGHKcFWbnPm6n0t/wT58LJ4i/aGt7+VcxaNp892oxnMnyqvPbqa/UyIJywG04zj3r4C/4Je6MW1j4g6m8QzFHbWsbk9zuLD9BX3tJcQxWkkzOoRAzsWO0BR/Fn0HXPavnca+eq12PqMAlTop9yxvYAboyCe3U//rr5F/as/bh074WC68N+C5LbVvFS/u7q8I3WmmZ6BiD80nsM1znxi/aT8ZfG7XLr4dfAq0u72HcYNT8TwjCKehSKU/Ko/wBvOeOK6/4BfsC+GfhyttqnjAReLfEMXzok2Ws4G65WM8M+f4mqIQjD3qhVWpUn7tNHxJqniL44+JLOK+utS8dz6beK00E+G8p8nkpgAgZ4APau9/Zo/Yw1/wCMl2dT8V2994c8IxP5k5uVIutSJPzqueVzgbmP4V+pdvCsEKRr8qqoAVRtAx2wKFV/O3lUY4Pzf3fpW7zBqPJBWOaOWqUlUqO/kY/hbwjpfhDQbHRNGsIdN0q2iURWkAwsQHTHv3ye9bXlgqQeSeC3f/8AX706NfLjK468++feivM3lzPc9iKUVyrYakaom3AA9uKQwrgKMqndQfvfWn0U+txvU84+I/7Pvw++KduY/EXhexvJzkJcRxCOVc9SGXHP1r5T+Jn/AATXYebL4E8XTCAnP9l6yN8Q56eYMYx2+U8195q22RTtyPX0pp5ZsIoQnlT/ABVvTxE6T0Zy1MNTqdPxsfm78E/hxZ/st+NpdQ+Lnw+1GVt+bHxPaJ9s061P95oxyre5z9K/QXwl4u0bx5pUOpeHtYtdW09/mWezlDk+x7r9CK2XtlaF0YK6vnchQEMPQg8Vwk3wT8NW+unXNFs38Mau/wDrLjRJDbrN/wBdohhJPxzRWquq1J7lUaPsU0d+sZHG7HPpTyv41UsILi3tY47mZbmZc7pVQIG98DpVquc6HruGOc8fiKDyOMKfUCiii1hWQpO7rzTcAOpxwvalooKuRPCzu37whD/CBXk3xW/ZW+HvxdL3OqaMtnrHVNV00/Z7kN2JZeD+Ir16jaG4PSm9VZkySlufLXgr4TfEb9m/ULqfQpoPijoEsYSS2uj9l1a1QEkCJ+VlHPQ4r2jwH8aPDnjy8k0+E3ej65DxNo2sQfZ7pPopOG/Amu68shGAwvoF6D6A8Vla94R0nxR5B1Sxhu5IDugnZcTQn1Rxyv4UkklYG33NWRghUHPzn06ccV+Vf7f/AIUbw1+0bqN4qgW+sWUF4CBj958yv9fuiv1Fs7CWyYKbh54VACrKcv17nvXwT/wU+0Py/EfgLVo4yDdW9zbuxPdNpA/8er0ME+WskeZj05UG30PiJnwucV7b+xtrzeGv2kfBbD5lup3smbO3/WqRj9K8QI3KQPbP4113wj1htF+KXhW+Vihs9ViuA3uoP+NfQV43hyrY+aoScZ83U5aeVpJ555OTN1pnErpjgFtv6VLqFmbG+lgPWGVozUMr4iY+gB/TFbP4dDLaWp98f8E3NTtNB+HnxE1a+nW3txqUKM7dflU4Cju3PA717R4m8C+Lf2i70wa9d33gj4aK4I0a1kEepawAc7rh/wDlhGcf6sckHk147/wTIhiufCnjuFwpe31G3mjLjIVmVsH9K8w/b88Ban8Ovifb6to+o6lp+k+JLaSdraO7ZY47xThgvP8AEPmxXzcoe0ryV7H08Kvs8NBpXP0T8H+CdC+HehR6R4c0q00bTIlASC2ARD7Z7t7kmuhV0JGGU/8AAhXhXwWg0P43/sr+G7D94dOvtLNrK0c7LNFKuQSrdd+4E/jXwR8BPE178Of2pPDeneJdZvb6x0vWZ9OlWS4LwhzlEkHPPLKPxrKFB1Oa72Oh4n2bgorSR+t54FMaVVXduUD1LDH55rjPixIZPh3rtiEka41OI6bCUO1jLMfKUj6E5r5V/a6+C/iC1+Gngbwd4KvxLY6YzNqNhLqaQ3d7kLibDsu/DBhnPFc1KmqtTl2Nq1b2cHO1z7dEg2g7l2+u4Y/OnBg3RlP0YGviTwX8NfEehfsL+LrHxrfyNeQJcXllDb34mexWMkoglQkZyOQCetcL/wAE0NWvfEPjjxtb6pqV/f276PbFo7uZnX5i2cZrpeH0m0/hMPrfvwjb4j9FBIpOAyk/7w/xp1fk18Mbi80n9snTdFg1nU20+28W3FslvPdO4KKrEcelfqrquqWmjWct1qVzBYW6tuNzczLFGvPTexFZVqLou25pQxKrKTtaxoUVzWmfELw3rNyLbT/EWmXd4xDGGO7VXK+y5ya6NI8gr9xzngnqP61ja26Oq66CkhQSSAPc4pPMXIG5ef8AaH+NZXiPQLHxX4ev9J1VC9neRG3kUEg49eK/JqebUvgH+0pbaX4i1TVdQ0vQNbjVvtNy7Ca1ZsRt7j5t3/Aa3o0vbX1tY5q1d0Wrq9z9fKQsAQCQD6EjNVrWeO5gjnhkWdbhfMWUchozypH1FeV2HgvTfF/xo1XxrcrLINBhXSrUNJthMy/NLKVzgkBlAPbmsEr3N5Tta3U9eork5/iP4VhvVtW8TaR9oB5jN5HleOS+DgHPcnk8V0Vs8V7FG4ZZoz/y2BBWQEY4wTnilZ8tylJOXKWBIpP3l/76H+NBdQSCy/iwFfkul1eeGv2zItDsdX1X+y7fxe0EFu927oFySc133/BSMT+GfjBY32lX2o2H9paQ0lyLW5dUaVJCqnaOnAGa71hLzjC+55zxtoSly7H6Wde4/OivOfgHeyXHwU8DtNI13NJpUBcyZZ34PJzW5qPxH8KWWoNb3fiPSoZ1YKI3u14J6BucLn3Ncbi02j0ITUo8zOqorI1HxPpWmC3a81OwtEuRlGuLtYxIP9jJAam2XirRNUultNN1fTrq425+zwXSSOy49FJNZuMuwKcH1Nnbmvhz/gqBb40L4dT91v7iL/vpV/wr7Q1XWtP0NY573Ubewi27VF1MsW9hztBYjJAr4t/4Kd3qXHhf4eIrBjLfTzja24YCr0I47104T+NE5cbb2Ej8/wD7sZPtn8qtaRdnTNat7pesMiyfpVXdgR/7pH5ipbCzN9fQwgczSrGK+sfw6nx0fi0Oi+KulN4f+InijTmXYbPVZYCh9gMfzrlmjyhV+cjBr2n9sfw82gftKeMom+7c3H20LtxkSKCD+leMgmRQxG0kcj0rOlJSp8xrXi4z5ep9u/8ABMPWiuvePtMkfcJYLa5SPpyu4E/qK92/b3+G/wDwnPwC1K/tbYXOoeHJF1GFiMtsXiTH/Acn8K+Pf+Cffin/AIR39oqysZGxb6xYz2pycZf5WUfoa/ULVtKtta0m/wBPuxvsrqF4JkxwUdSrA/gTXgYp+yxKl0PocElUwriz4B/YK+Ls2m/D3xr4QR/M1DfHqGkRk5LvcDZsQf7O3P4159+3d8KR8KPirouq6XGLez1SyjliaMdbu3ILk/7TMQce1dx+xX8DLvw/+0x40F6pjtPBUksMYcfI00hzFz6Km0/jXvf/AAUD+Hn/AAmXwBu9YhhSe/8AC8y6rHj7xUZV1H1DE/hWkqkI17xejMnCbw9re8tjq/hZ45/4XhYfD3UdwltrfTRql6Q2R9qA8tVbHQhwXxXiX/BTrRrJvC3gfUHto2v11SSAXO0CTy2GSm7rt46V6v8AsN/C8fDv4A6N9o80X2vA6nOsnVI3/wBWo9Bs2n6mvLv+CnV3DD4F8DJLMkbNqzFUZgGIC4zg9vesKXKsQuXY2r831ZX3K3wHiSH/AIJy+I0RQFW31Egeh3tXC/8ABLhmPxB8XqScLo9qQM+rNXZ/A/U7OP8A4J1+KgbuDbDDqCSnzB+7Jc4B9z2HfiuF/wCCX17bw/EfxXGLiJpZdGtSsZcBiAWyQO+O9db+Gr5nLf8Ae0vI878BEw/t0W5QkN/wmVyvXttau0/b58U+KtN/aHsrbVY57rwtafZ7rSNNuWIs7sAAzBl/jO7cOc4FcH4Fv7cftuRXhuYBap4xuH87zl2EEMBg555r7R+Mvxa+F/xF+MGnfBXxXpVrqv2tH869uz5YtpyuY4o2IB3NxyDjnFTVb9onLYVFe5OMd2eTazZ/DX9tIeET4S1G28AeNdNu0hvIEQW90bMjMix7MB2BUbfQE5r7h8PaTDoej2Ol2zTXFvZxLAJbmQvIdo+8XPUnvX5UftY/s6L+zV428P3Ogatd3en6iHfTF8zN/ZyxkErleWGWXDY5Ga/Tn4R3muaj8NPCN54iUJrtxpsEl/k4LSFBkkep6n3rlxKioqUHod+Hm1PlnvodpgZJ7kYr4G/4KWfCnZ/YXxBsYi2W/sjU2UkcMCYpD6YwRn3Ffe4cNnAPXb7j61xPxh+Hdt8Vvhn4j8L3QVl1K1dY5NucSDlCB7MBXPh6ihNN/M6MTDnpvl+R4T+yX8epPEP7MyvPKZ/E/hwjRvLl5aW4JxaqfZgUGa9a8WfBgeKPgvceCP7Uu9OmuLcs+pW8pSUXByxZiOq7jgj0FfIP/BPH4ba03xB8U6lq2+HT9BkFhLaSLhLi/Q4LkeqABge1ekf8FG/iT4s8D+EvDGnaBd3Wl6Xqs051G6tztkkCqCsO/wDhByTjv61vOKlWtHqctKbVDmn0Ol+GPwW8C/BT4H6v4d8RPoGo+IrmxuZtWuLny5Zp3CkrjOSAuBgdiM9a8o/4JrfFjVtR1TXvAl/dyXek2sP9oaYJ5C7xKZGDAMeSMBeK1fgt4Y8L+A/2NdW8VmCDWPEniPSbpppml8+eQsrAKMk4CDk49K8m/wCCac8TfG7VQ8kLSf2IY1VJBuJB5CDPPH5VryRVOSZm6knOMlszmNWlZf27pWBwW8aMpxxxXon/AAU9fb8VPDIyQToUoUA9f37V5hqmp2Lftxz3P22AWsfjNmacSAp1xwe/JAr0j/gp1cwXPxU8PRpNGLmLQ3ZgXGUBmbGRnqfT0rtulVg32OKzdOS7s639oj43618NP2XPhf4e0G8lsNS13S1+2XkDbZYbSNPn2nqGJYDI54rSfwf4Z8J/8E6LvULmyt7m81DS1u5L67jElzJcSyqVJdstkEjvxXF/tR/Dy58W/s0fCPxxpiG9tNH0wW961t+82xSgASkDqFIOfqKd8AYNE/aR+GPh7wJ4z8Y2WiaD4NcvdaJ9oVJ9VAOY5WkJAWMA424JJ54rBxh7PmT1udClU53HpZfkdF+yl8NJv2g/2UfEnhrxT/p0EN3JbaDqN4C8tnIIlIMLnkqHJ6H1FeN/sWeKU+Dv7RsOm+IbSOznvjLodyZxta2uA2Vb2ztA/wCBV+ivwo8QeHtZ0+Wx8F2Edv4N0dEtrLUbYbYJX/5arEMc7eMv65r4c/4KA/By78NfFPSfF2g20hTxVLHEvkR4Meoqw2Hd6ucH6Kawp1VLmjLqb1aLjCM+259t+OfB+lfFnxzoujatYRanp3huVdVuI7hdyfaSP3Uf4cPjoRwa+Sf+CnWrxrrPw+0e3VYUt7e5uGhQAKofaFwB0+6a+0PhT4Vv/CngvTk1m6+2eIZ7eOfU7krgyXPlgH8ABt/DNfnF/wAFAvEx8RftGX1oj5g0mwgtMA5xJ8zN9PvCng4p10+wY2XLh7PqfNu3KjH8Iz+ArqfhXpLeIPiJ4X01V3m71WK3C+7A/wCFczkxjIG4gdOma9n/AGOPDza/+0r4NiXlba4N6V25/wBWpJP6171eVocy2PnaEXKfL1PZP+Cl/hAad8QvDXiaKIhNUs3tpZP9uIjaPxBNfGituXdjGTn86/VL/goB4APjL4BX1/DGPtmhTpfxtjnZ91h+O7P4V+V5bdzjA7D2riwc+egkd2Ohy1mzoPh34tn8BfEDw14kt32SaXqMNwT/ALO7aw/Jj+VftxZ3VvqWnwXds/2i1uUWWJ04DqwBB+mK/CVoVm+8cAA/n0r9V/2FPim/xI+Aelw3Epl1XQHOl3B6koh/dMfqoFY5jT+GRvldS/NAv+EPHLfEL4zfEjQ/By2miWuimJdR1gW6Sz3uosuBwf4I1VRz17V1lh4im0n4exj4uLpOn3t7PJp0sNoxaG8UtiMIn3izDnaBkc18/wCl/wBvfsq/tHeM9W1HQNV1/wAA+N547mPU9HtGumtJx0V1XBGTkH2ArW+PUfirxd4v+FHxM03w1q0vhjw9qrvdaW8QFz5LjAvHiI4AHIHXGea81pXsenGcleyPf9M+LHgm1tNXsrXWILZPC9qp1Cw8p1lsYVX5WMZG7aFxyBivO/GPi34A/F6fwpc+Jb7Q/ED62Hg0WW9QlJP7wQkYjbpnODXmnxN8H6n4m/aF8XeN/D9lOPDUPgO7sb+/WIhdTuZUYQwxH/loQpU89CcV4l/wg+rp+zt8AtMl8Kas+p2niFpdSt/7P2zQIsikySnHyrgrj15rSFJXvczq16iVmj6w00/s/wBv4V8b6FYppA0TR5I5fEOnpFIYY3XARnjx849xkZqPwSP2dfDXiTw/P4ZbRNK1bXbGU6ZNZ7oPtNu2Q4D4CjoeCc14h4m8P36fFv8AaVuYdF1SO01Xw0ltpslvY4jupAwBWIY+Zt3BNYlv4Lvj4a/ZKhbwrqQj0m4M2qRCx+e1XcR++9sg8VTpx7k+3fOvdPbU0f8AZZTR77Xk0/w4sHh/UFt7q9Fs4e0uiSwLHG7JI613vxFs/g1418R+G9I8UxaVe6/rlslzo7TQslzcoOVMU2Mg9MLnNfI3xD+Huva1b/tUW2kaBqEj6neQXljEtn5Ud5DGy72iYjDEewru9bfUfGHxc/Zo1u28La7Fo+l2iQ3Vze6cUNu4UJl/7gDDr3pOmnbUftX9mJ67YeMv2ftFiufG76lZXkmkTf2bLqmqCa6ns3Bx5Y3glMEcnoOKsfEn4163Y/E74U6b4N1fw7deHvE7NLcvfuWnuYiRgwEcZwenrxXgXws8GTw/B39pJ7vw3fvqF/e3DW0U1hk3SOzBDAp+9kj7w/pWZ4f8O6zDe/smSyeH9RjXRfPGqF7IlrP97jEn93nmp9kndX01/IJVqkUnbXT8z6y+HH7RujfEfXviDHBbPa6V4TuWtHvTC7STFR+8faBkAdAMZOK63wn8ZPBvjTwtf+JNB1yPU9Gs5GimuoIXIjYcEBcZY5x0FeA/sp6Vqnw3+JnxZ8Ma1ol3a3mp6++oWreUWguLV2J80SHrwelXfgP8HtY+F3x3+Jfhu0jMPw4vDBrVojD5RO5J8qP/AGV5J98VnKEU2kdMatVximtzv/jF8S9C/Z9+G914g0/R4pLzWL2KKztUQwm9vZ8BWl6EDkbgeccdaPFvg/xZ4quNAsNfsdB8VeEL+ykfXLW8tVH2KcR7klgOMtknHzdAvvWL+2f8Idc+MHwkEPhhmfxFo97HqlnbAjdcMh6Anq2OnvUvwt+Pl38Q9Dt9Pl8GeINI8RxQNFqseoWLQWtoyxkMfNPDZIG0Drk0krq6HNzj7ljxn9mT4i/Dfw98HdZ1nxpZ6F4Ys11O50fFmsssSx8q2Fx+63dyODXs/gfwn8BfDfxIsdJ8KaZo2m+MI7E3kAsYmjle3dATIrgYcFT2J718y+CvBV7H+xT8Z7Kbw3qQ12/1KUxR3GnlrmXe48sqvRgFPVQK6D4bafqnhD9on4S+I7vw3q76deeBV0cTwWDOVuBkCOT/AJ5nIPPvXQ4OV3f+rI44VZKNONv6uemSab+y5F4d1HxSbTQRpdhqP2a61SSFx5N4W3YY4yGyM5rpvEmk/s/eMvEusan4gtNGvNatNOi1C6n1VHjP2TaBHIpcAFDwBt6n3r5Eu/BviQ/sufFjS5vCepf21feMluk09bHc80e4ncq9wAOtfSf7T3wx1j4g/syafJ4Y0pb7XLS006ZrIQL59xDEFZ4OmcKcnZnrmlKEVpcqM5djc8bfEnwn8L/gt4vs/h0LC01HQdEbVrbRL60fZ5DnrtYfMjegz71wPgbw5+z1r2n/AA+1Pxn4b8L2PjXxTbw3iWNvbN9le4kwcDjYpyfusRXSfFfxhp3xR/Zs8YTaJ4Y1VdZufD62su/TSl2suFC2wHU5IbgEYx715P8AEvwddH9nj9n22sNA1KTULLVbWa9gt7L9/FsA8wuOoAORyaUI6bjlJN7HuPw4/af0XV/j5rfwxOlReFdM0y026Ut2n2WS5mjY+b5aNgBAMYx15r0XWF074q+LtMsI4ItQ0PQbsX810oDxvdhSIo1PQ7QWJYcZAFdRqngTw94xSG41PRbO9mwrxz3UA85OBxv+8PzrVtdOg0iyEFrbw2tuqnakEexFOR1Arlc1zaHbCm5x5ZdR93eW2k6Xd3t7MIbW2jaaaVhwqgZZuPzxX4k/ELxVceOfHniPxFdNvl1TUZrkEn+HdtX9FH51+m/7dfxQf4e/AjUbWCYR6rr5XTICnHyN/rnH0QmvynWNUHysWHQ/UV7GXU780jw80qbU+wO+xQ3oQf1r7N/4JoeDv7R+IfibxJLCSul2iWsUnbfKTuH4ACvjMttBOMgcn6V+qn7AXgD/AIQ34DafqEqAXuvTPqEjYwdh+VR+G3P41tjJ8tBowwMOasmfQfiDRYPEWg32mXA3Wt7bvA4I7MCv9a/E34meA5/hj8Qdc8OXULRy6beNGCwx5kWcoR/wHFfuLsU7vfrzXwF/wUo+DckV3pPxH0u23KB9i1MrnC8fu5D9eErysFV5J8p6+Oo+0jznwfHKVYtnYxf5X9PQV9EfsRfGD/hVHxitLG/lWDQfEuLG6BPEVweYn+hOF/GvngIuwIzbjw23sB2x+tOVDwEkeFlXCSJyykHcCPfIHNfQ1qftY2PnKNZ0536H7vLvlCYZfMUgunUY9alr58/Y2+PS/Gj4ZR2+pXC/8JPoipa38SEZlUD5Jvow4+oNfQdfKTg4SaZ9lSlGcU0GBjGBj0wMUfgPyFFFQaWD8B+Qo/AfkKKKAsg/AfkKPwH5CiigLB+A/IU12VVycAZxnb6/hTqPzH0oGcl8QPh9Y/EDTrO1u9R1DTnsb2O+t57Ccxus8ZyhJx8456dK2dH0aPSoSFY3M8372a5n+87VphAFxjgZx7fT0pcfMD1IGOaQCKCAMgKeuBS/l+QoAwKKYBj2H5Cj8B+QoooAPwH5Cjp04+lFFAABjsPyFH4D8hRRQKwVG8ojHP8ArJPmC9h7mpK+ef2y/j0fg98NpbPSrhV8Va8rWuno+MxIR+8m9go4+rCrhB1JJIzqVI04ts+JP23PjF/wtr4x3tjp8om0Dw7usLQA8SzjmZ/pnIz7V88ltuFzuZX+Z/UdxUkoWRsl3lOMGRjhmOckn3JyaNqncXIWPBZq+ro0/ZRsfGVqjqVObodN8MfAdx8T/iHofhy0haSXUrxYyQP9XD1kJ/4Dmv2y8PaJB4e0Oy0y1ULa2cCW8SgdAoCj+VfCv/BNb4NPJcar8R9TtjsI+x6W7gjcP45B245Q19+7QAMfSvnsbV558p9JgqPs484Y4rmPiN4G074jeC9a8O6uofT9Qt2hc7clOOGHuDyK6nAIqCRHLttOARgex9a4Ie67nozScXE/EH4mfD/U/hh451fwxq8YjvtPcqXI2pJH/A6n0Ixx65rlC24qpDKwOJB0KnrgfUV+nf7d37ObfEvwePFuh2Bn8UaJGSUQZ+1W/wDEpHUleo+pr8yFkHkCMIdqsT85y4PqfbtX1uEr+1jq9T5LE0PZStbQ7j4J/FvVvgd8RrLxXpAMyp+7u9PL7UuoCfmQnsQOQexz61+w3gP4haJ8SfCmn+ItAuxeaXfRiSKQdQe6MOzA8EV+H5cDqcV73+yl+0/e/AHxH9j1NpLvwVqDhr22Q7jbs3H2iJex/vDuM98VyYzC83vR3N8Fi+RuMnofrSRg80Vm+Htd0/xFollqWmXsN/p91EJbe5gbckidiD+h960u5HcdRXz/AMOjPp4yU1dBRRRQUFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFBzjgZPpSFgCBkZPQdzWb4i8Qab4a0S+1PVL2Gw060iMtxczNhETuc/yx3otzOyJlJQV2Zvj74h6J8NfCGoeJNeuhaadYxmSUnqT/CijuzHgCvx6+NPxb1f43fEK98VauTCzkx2dkH3JaQfwxj1OOSe5x6V3n7VX7UV78ffFIg01pLTwdpzlrGzfINyy8faJR3P90dhjvXhIcHoa+gwWF5felufMY7Fe0ajHYEVI49qlixbYi9Sz9efQY711Pwx+H+o/FXxxpXhfSU827vpQhYDckaD77sfQDP44rlsCUNHtYhiN2w4cr7fXpX6d/sJ/s4H4YeED4r1uy8nxTrUQwjDH2S26ogHZm6n8K68XX9lHR6mOGo+1klbQ+jPh74J074e+DtH8P6Sgj0/T7ZYI8Lgtgcsfcnk10uPlqJEcSLk5AGPqfWp8YFfJTfM7s+sgkoqIg6GgU6ikVbW5BL8+FIBB7V+bX7cv7LQ8B6tefEHwtaBPDt5IDqtrCv/AB6TM2BIAP8AlmxOPZiK/SuqmraXa61p1zY3sMdzaXCGOWGVQySIeCrA9QehFb0a0qMro58RQjXjyn4OvHg0kLAzO6EAhcBv7qe9fTn7Xn7Il38GdQm8T+GoprzwTdS/6rBZ9NYn7j+sZP3T26HtXzG8ZFfU0qsasU0z5KtRdF2aPev2Xv2rNb/Z/wBROnXRfV/BFw26XT1bc9vnrJbZ79yvQ/Wv1F+Hnj/QfiZ4WtNd8N6hDqel3C5SeI8qe6OOocdwelfiAoworuvhJ8cvFXwI8Q/2x4ZvTEkpVbuxmy1tdKOgkHYjJww5Ga48Tguf3o7nZhcd7LSpsftVRXz38Bv2yvBPxpSDTpZ08PeKyo3aTfyBUkbHJhc8N/P2r35WVsli4ccsB8rAe/qK8GUJQdpI+mp1IVo80HcmooorO6NLx7hRRRTAKKKKACiiigAooopXQ7MKKikdQu4B9/8AC2Mtj29BXz78e/2zvBPwYE2mw3K+JfFG391pljIHSNscGZxwo/X2rSEJTdkjGdWMFds9i+Ifj7QPhr4Wu9d8SajHpmmW6/NM5+Zj2RB1Zj2A61+W37UX7Vmu/H3UjpturaP4Ogfdb6azYNxg8SXBH8XcL0H1rg/i18bfFPxz8QnV/E18ZjEWFtZQ5W2tVPURjuTgZJ5OK4VhlcV72Hwfs7TlufN4vGufuxWgjM6yISFeNlw7/wB5fQUqR5NCRk9s19P/ALIP7IN58YdQh8TeJYZrPwVay/6o5VtSYH7i9xED1PfoK7atSNKLbZxUaLrOyOm/Yb/ZZHjjUbH4ieKLUN4etZCdLtpF4u5lbBkYHrGpGMdyDX6RxfKNu0LjsO1RaVp1tpOnW1lZQR21pboI4oYlCpGo4CgDoAKt18rWrSrSuz63D0I0I8oh60HoKdRWB0W1CiiigYhGaGXIpaQijcW2pT1PSbPWLG4s762ju7W4jMcsMy7kdT1BBr83v2pv2HL7wHFc+Kfh5Zzal4eOXm0YEvPZDklkJ5eP2PzCv0txxUPk78hskHj6/Wt6NaVGV0c9bDxrx94/BlJA3ml4mRVwN6/dU+jZpkTNg7uG/uHp7Gv04/aP/YQ0H4nzXuveFDF4c8UOfNK4xaXTY6Oo+6T6ivzv8e/DPxJ8L9em0nxNpU+l36Z4kGUlA/ijfoV/LFfS0cZGoklufMV8LKne60OaZizRMSQ8Tbo3QHch/wBkjlSfUV9E/Bf9t34j/CxIdOvGfxnosMZY2FyTNcwoOpWZeSAOzGvnKV9kabmVWY9j/Kvo39nuzsPhR8LfF/xc1W4trS6nU+HvDwuAsvlzSjDzyx+nIGD/AHfeqxFOEo3aMcPKalaLsfZ3wu/bs+GHxHMME+qt4Z1KTBa01cbEGRwBMPkr6Csr+DULGG6t5o57eQbknicOrjsQRwRX5CeJvg34h1ax8Dxz2mlN4i1e2uJtOt7dtl/rcI+YTzR4wq7d2zoW9q4rw74s8efDae2u9D1LXvDanKxtC8iRnadrDDblwCCCOxBrypYOEvgZ7UMdNfFE/bcSqV+UFz6jtSx7yp3AD881+Vnhn/goH8XfDlvALy70vXoZFDI+o2pVmA4OJARntk4r03R/+Co1/bYj1vwFaTSom5msdQK7vZcoRn2rleDqr4UdkcdRl8Tsz9B6K+H7b/gqHocqyB/AeoiRQrAR3gZWB7520Tf8FQ9EZQLfwDqUshGQj3YT8/lo+p1/5fyB4/Dp25vzPt+TeFG0A/nmmtKFUbv3Z9T3r8/NW/4Kf6xcrIdH+HdrCp4Et3qXmFfUkBRXmPi3/goJ8WtfQx2V5puhQHq1hafvef8AaYnp647044KrJ2aJlj6KjeLP1IvtSh06wmu7maK3t4xl55pBGiD1JPAr59+KH7eHwv8Ah2bi2tNUfxTqcQ2m30ZfMjDe8v3RX5i+MfiL4t8bz3Fz4j8Q6rrkwUsY7u6JBI7BVwMZ6evFetWvwoX4GeM/Avifxja2fi/4bao0Be/jjBtovMA3JLtPyyIT905zjrXV9SjT1qM4/r06nwIu/GH9t34kfFmO402zuk8J6M4ObTSmInZe4eU8jj+6RXz9HPuWR0x++O6RiMs59WJ5J9zXqXxY+BmseDfjJ4l8MafD9psbR21K1ubiQJb/AGJ1LI7P37DAzzivKULiPkKpGOrfL7jNerh6dNR5onj16tSUrSHgYRgpw3UL6+tCl5NnlxMc8Hd/Ce3P8X4V1Pw++Fvij4qa3HpPhrR59TunxynyxR5/ikfoF/nX6I/s3/sK6B8LXstb8VGLxJ4pQiUDb/oVm2OkSH7x9z+VRXxcYRt1NqOFlUtpoeE/sr/sLX/jeK38TfEazlsdCOHt9GYlJ7sdQzkYKRn0+8a/R7TtKtNJsoLSyto7S1gjEUUMK7URR0AA6VJ5G0AAkEcDHb6VP2r5qtWlWerPp6OHjQj7oiIEUAcClAxmgClrDY6NwooooGFFFFABRRRQAU3NOpuR6UCdyN4y7DIGB3P9K5zxt8OvD/xG0aTSPEej2msadICDDeIGI91PUH3rqDyKTIFUpNbEOEWveR+f/wAZf+CbM1tNeat8OdUEuVYpo+qPynosUvv0+bivjbxr8NPFfw3mm0zxLod/oCyYEqsrfZ2Pc7/u59wa/caYjYcrvHpWVr3hvTPEtm1rqlja6haHkx3kQkX8jXoUce4e7PU82tgFL3oaH5EeGP2jL3RPFfhjxPqmjw65r/hTSjpWi3a3BjiUFSqTTp/y0aNSwwM5zXSfFf8AaFttYXwFpXg/Vn/siy06a21KbULIFVu7tyLqbypBtP3mK9l7V9m+PP8Agn/8LfGbPPpthceFNQK5EmlyZTPurA5/DFfPXi//AIJq+MtOlkn8P+JtO16MH5ba+ia3f3BYkg8e1dscRhqjutDhlh8RTWp5T+2NeWr/ABMt9M0y1sYNA0fS7ew0+Sy8spMFTc7jb2Jbp1zmuntbfR/DHwC+BUurTaRozajrU+paje6jpxmMtmrnKFQpJyvT0ODXF+IP2PvjJ4eV45fBl9qSqGGzT3W5Qns2cg/TFcx4t0L4my6TpmmeJdN146bpKmGzg1C1UraAj5tu3BH45rsjyyilB7HHJOEuaS3PRZvghofxg8fzXHgManomi67PeT6NDf2gS0SKGNWLhm+cq7bsbc471x3jP4J2Pgzw14X8Xxa7d6x4W1yymlfUEhRWtrxTtMDE8A5zwfSpvA37QHjfwPrHhKK7vZvsXh1GtII0jUXEVnJxIqFgV3HjqO1cnrPiDUNU8PP4S0uW+vfDUeqSavFYXa7QbmQnLEegBPHvUqFSO5cpU3Z2Pa0/ZW8LReK7rwumva1da/c+EE8T6a4ijWHITcySheWOeBtyMVH8RfgX4Y8CfDqW4t7SbU7rVNMsZtB8RLMdslyzMLyOYn5I0U+WMEgnPtXF2/iD43+KtZ0vVbG28QT6vp1h/Zlncadax/urb7vlYxlh3rS0P9kz42eKbc2a+GdXtNPd9zWmrX3lQbick+WSR1Oay5nBpzehacZq0FqeV+KfBt74C8aDRtcaytpLaW2knksphcwxKwByjpkHA7etdp4e+P8ArPhHQvFnhmKw0rXfCeuqwGnagrtBBJnAnXjiQgA+nSvdvBf/AATQ8UaiyN4k8S2eixgjMdipuZGH1yAMdOQa+jPh/wDsBfC3wYUm1GxuPE96BzNqsuVz6hU2gfjmlVxWHUdXcqlhsQ3dKx+eNlY/E/8AaDvrW1s4dW8SSQQi0h8qPbbxwrwibj8hHrk9QK+qfgp/wTbkZ7PU/iLqCoiqC2iaa5If/Zlk7fROK+6NE8O6Z4bsltdMsbewtV+7BbRCNfyFaUJOzkBfZelebPHOS5aeiPSo4BR96epz3gr4e6D8PNGi0jw7pVpo2mRjAt7SMKCfVj1J966BE2ucIVB754qTINKMAVwOTe56SjFLQTNOpuR6U6pLV+oUUUUDCiiigD//2Q==";
+
+// little decorative soundwave, purely visual
+(function(){
+  const wave = document.getElementById("wave");
+  const heights = [6,12,18,10,20,8,16,22,9,14,20,7,12];
+  heights.forEach(h=>{
+    const bar = document.createElement("span");
+    bar.style.height = h+"px";
+    wave.appendChild(bar);
+  });
+})();
+
+/* ==========================================================
+   2. STATE
+   ========================================================== */
+const state = {
+  step: 1,
+  totalSteps: 8,
+  data: {
+    readAck:false,
+    name:"", email:"", phone:"", age:"", membershipStatus:"", smallGroup:"",
+    roles:[], experience:"", instruments:"", training:"",
+    faithAnswer:"", whyJoin:"", previousChurch:"", availability:"", conflicts:"",
+    refName:"", refContact:"", agree:false,
+    mediaMode:"file", mediaFile:null, mediaFileBase64:null, mediaFileName:"", mediaFileType:"", mediaLink:"",
+    slot:null
+  },
+  slots:[],
+  submitting:false,
+  submitted:false,
+  bookingResult:null
+};
+
+const stepNames = ["Before you begin","Basic info","About your music","A few questions","Share a recording","Reference & agreement","Request an audition day and time","Review & submit"];
+
+/* ==========================================================
+   3. BACKEND CALLS
+   ========================================================== */
+async function fetchSlots(){
+  if (CONFIG.BACKEND_URL.startsWith("PASTE_")) {
+    // Demo mode — mirrors the real backend's default rule (every Wednesday, 5:00 PM)
+    // so the flow is testable before your Google Sheet backend is connected.
+    const fmt = d => d.toISOString().slice(0,10);
+    const d = new Date(); d.setHours(0,0,0,0);
+    while (d.getDay() !== 3) d.setDate(d.getDate()+1); // next Wednesday
+    const slots = [];
+    for (let i=0;i<6;i++){
+      slots.push({ id:"demo-"+i, date: fmt(d), time:"5:00 PM" });
+      d.setDate(d.getDate()+7);
+    }
+    return slots;
+  }
+  const res = await fetch(CONFIG.BACKEND_URL + "?action=slots");
+  const json = await res.json();
+  if (!json.success) throw new Error(json.error || "Could not load audition times.");
+  return json.slots;
+}
+
+async function submitApplication(payload){
+  if (CONFIG.BACKEND_URL.startsWith("PASTE_")) {
+    await new Promise(r=>setTimeout(r,900));
+    return {success:true, slot: payload.slot};
+  }
+  const res = await fetch(CONFIG.BACKEND_URL, {
+    method:"POST",
+    headers:{"Content-Type":"text/plain;charset=utf-8"}, // avoids CORS preflight on Apps Script
+    body: JSON.stringify(payload)
+  });
+  return await res.json();
+}
+
+/* ==========================================================
+   4. VALIDATION
+   ========================================================== */
+function isValidEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+function isValidPhone(v){ return /^[0-9()+\-.\s]{7,}$/.test(v); }
+
+function validateStep(n){
+  const d = state.data, errs = {};
+  if (n===1){
+    if (!d.readAck) errs.readAck = "Please confirm you've read both documents above to continue.";
+  }
+  if (n===2){
+    if (!d.name.trim()) errs.name = "Please enter your full name.";
+    if (!isValidEmail(d.email)) errs.email = "Please enter a valid email.";
+    if (!isValidPhone(d.phone)) errs.phone = "Please enter a valid phone number.";
+    if (!d.age) errs.age = "Please enter your age.";
+    if (!d.smallGroup.trim()) errs.smallGroup = "Please answer this question.";
+  }
+  if (n===3){
+    if (d.roles.length===0) errs.roles = "Select at least one role.";
+    if (!d.experience.trim()) errs.experience = "Tell us a bit about your experience.";
+  }
+  if (n===4){
+    if (!d.faithAnswer.trim()) errs.faithAnswer = "This field is required.";
+    if (!d.whyJoin.trim()) errs.whyJoin = "This field is required.";
+    if (!d.previousChurch.trim()) errs.previousChurch = "Please answer this question.";
+  }
+  if (n===5){
+    if (d.mediaMode==="file" && !d.mediaFile) errs.media = "Please upload a file, or switch to pasting a link.";
+    if (d.mediaMode==="link" && !d.mediaLink.trim()) errs.media = "Please paste a link to your recording.";
+  }
+  if (n===6){
+    if (!d.refName.trim()) errs.refName = "Please provide a reference name.";
+    if (!d.refContact.trim()) errs.refContact = "Please provide a way to reach them.";
+    if (!d.agree) errs.agree = "Please confirm the statement above to continue.";
+  }
+  if (n===7){
+    if (!d.slot) errs.slot = "Please select an audition time.";
+  }
+  return errs;
+}
+
+/* ==========================================================
+   5. RENDER
+   ========================================================== */
+const container = document.getElementById("stepContainer");
+
+function render(){
+  document.getElementById("stepLabel").textContent = state.submitted ? "Done" : `Step ${state.step} of ${state.totalSteps}`;
+  document.getElementById("stepName").textContent = state.submitted ? "" : stepNames[state.step-1];
+  document.getElementById("progressFill").style.width = state.submitted ? "100%" : `${(state.step-1)/state.totalSteps*100}%`;
+
+  if (state.submitted){ renderConfirmation(); return; }
+
+  const renderers = {1:renderAcknowledge,2:renderBasicInfo,3:renderMusic,4:renderQuestions,5:renderMedia,6:renderReference,7:renderSchedule,8:renderReview};
+  renderers[state.step]();
+}
+
+function field(label, inputHtml, hint, errKey, errs){
+  return `<div class="field">
+    <label>${label}</label>
+    ${inputHtml}
+    ${errs[errKey] ? `<div class="error-text">${errs[errKey]}</div>` : (hint?`<div class="hint">${hint}</div>`:"")}
+  </div>`;
+}
+
+function renderAcknowledge(){
+  const errs = state._errs || {};
+  container.innerHTML = `
+    <h2>Before you begin</h2>
+    <div class="sub">Please read both documents below carefully, then confirm you've read them to continue.</div>
+    <div class="field">
+      <label>Worship Team Information</label>
+      <div class="read-box">${formatTextBlock(CONFIG.INFO_TEXT)}</div>
+    </div>
+    <div class="field">
+      <label>Worship Team Member Expectations</label>
+      <div class="read-box">${formatTextBlock(CONFIG.EXPECTATIONS_TEXT)}</div>
+    </div>
+    <div class="agree-row">
+      <input type="checkbox" id="f_readack" ${state.data.readAck?"checked":""}>
+      <span style="font-size:13.5px;line-height:1.55;color:var(--text)">I have read and understand the Worship Team Information and Member Expectations above.</span>
+    </div>
+    ${errs.readAck?`<div class="error-text">${errs.readAck}</div>`:""}
+    ${navButtons(false)}
+  `;
+  document.getElementById("f_readack").addEventListener("change", e=> state.data.readAck = e.target.checked);
+  wireNav();
+}
+
+function renderBasicInfo(){
+  const d = state.data, errs = state._errs || {};
+  container.innerHTML = `
+    <h2>Let's start with the basics</h2>
+    <div class="sub">We'll use this to follow up about your application.</div>
+    ${field("Full name", `<input type="text" id="f_name" value="${escAttr(d.name)}">`, "", "name", errs)}
+    <div class="row2">
+      ${field("Email", `<input type="email" id="f_email" value="${escAttr(d.email)}">`, "", "email", errs)}
+      ${field("Phone", `<input type="tel" id="f_phone" value="${escAttr(d.phone)}">`, "", "phone", errs)}
+    </div>
+    ${field("Age", `<input type="number" min="1" id="f_age" value="${escAttr(d.age)}">`, "", "age", errs)}
+    ${field("Are you a member of WVCC? If so, how long? If not, are you currently signed up for a membership class?", `<textarea id="f_membership">${escHtml(d.membershipStatus)}</textarea>`, "", "membershipStatus", errs)}
+    ${field("Are you a member of a small group? If so, whose small group do you attend? If not, why do you not attend a small group?", `<textarea id="f_smallgroup">${escHtml(d.smallGroup)}</textarea>`, "", "smallGroup", errs)}
+    ${navButtons(false)}
+  `;
+  bind("f_name","name"); bind("f_email","email"); bind("f_phone","phone"); bind("f_age","age"); bind("f_membership","membershipStatus"); bind("f_smallgroup","smallGroup");
+  wireNav();
+}
+
+function renderMusic(){
+  const d = state.data, errs = state._errs || {};
+  container.innerHTML = `
+    <h2>About your music</h2>
+    <div class="sub">Select every role you'd like to be considered for.</div>
+    <div class="field">
+      <label>Role(s) you're applying for</label>
+      <div class="check-grid">
+        ${CONFIG.ROLES.map(r=>checkItem("role",r,d.roles.includes(r))).join("")}
+      </div>
+      ${errs.roles?`<div class="error-text">${errs.roles}</div>`:""}
+    </div>
+    ${field("Musical experience", `<textarea id="f_exp" placeholder="Years playing/singing, any bands, worship teams, or lessons...">${escHtml(d.experience)}</textarea>`, "", "experience", errs)}
+    ${field("Instrument(s) or vocal range (what part do you normally sing—soprano, alto, tenor)", `<input type="text" id="f_instr" placeholder="e.g. Alto, or Acoustic guitar + harmony vocals" value="${escAttr(d.instruments)}">`, "", "", errs)}
+    ${field("Formal training (optional)", `<input type="text" id="f_train" placeholder="e.g. Piano lessons for 6 years" value="${escAttr(d.training)}">`, "", "", errs)}
+    ${navButtons(true)}
+  `;
+  container.querySelectorAll('input[data-role]').forEach(cb=>{
+    cb.closest(".check-item").classList.toggle("checked", cb.checked);
+    cb.addEventListener("change", ()=>{
+      const v = cb.dataset.role;
+      d.roles = cb.checked ? [...d.roles, v] : d.roles.filter(x=>x!==v);
+      cb.closest(".check-item").classList.toggle("checked", cb.checked);
+    });
+  });
+  bind("f_exp","experience"); bind("f_instr","instruments"); bind("f_train","training");
+  wireNav();
+}
+
+function renderQuestions(){
+  const d = state.data, errs = state._errs || {};
+  container.innerHTML = `
+    <h2>A few questions</h2>
+    <div class="sub">Help us get to know your heart for worship.</div>
+    ${field("Tell us about your relationship with Jesus / faith journey", `<textarea id="f_faith">${escHtml(d.faithAnswer)}</textarea>`, "", "faithAnswer", errs)}
+    ${field("Why do you want to serve on the worship team?", `<textarea id="f_why">${escHtml(d.whyJoin)}</textarea>`, "", "whyJoin", errs)}
+    ${field("What church did you attend before WVCC? Did you leave in good standing with that church? May we contact your previous church to affirm your character and good standing?", `<textarea id="f_prevchurch">${escHtml(d.previousChurch)}</textarea>`, "", "previousChurch", errs)}
+    ${field("Your general weekly availability", `<input type="text" id="f_avail" placeholder="e.g. Available Sundays and Wednesday rehearsal" value="${escAttr(d.availability)}">`, "", "", errs)}
+    ${field("Any scheduling conflicts we should know about? (optional)", `<textarea id="f_conf">${escHtml(d.conflicts)}</textarea>`, "", "", errs)}
+    ${navButtons(true)}
+  `;
+  bind("f_faith","faithAnswer"); bind("f_why","whyJoin"); bind("f_prevchurch","previousChurch"); bind("f_avail","availability"); bind("f_conf","conflicts");
+  wireNav();
+}
+
+function renderMedia(){
+  const d = state.data, errs = state._errs || {};
+  container.innerHTML = `
+    <h2>Share a recording</h2>
+    <div class="sub">Upload a 1–3 minute clip of yourself singing or playing, or paste a link if your file is large.</div>
+
+    <div class="check-grid" style="margin-bottom:16px;">
+      <div class="check-item ${d.mediaMode==='file'?'checked':''}" id="modeFileBtn"><span>🎙️ Upload a file</span></div>
+      <div class="check-item ${d.mediaMode==='link'?'checked':''}" id="modeLinkBtn"><span>🔗 Paste a link instead</span></div>
+    </div>
+
+    <div id="mediaFileZone" style="display:${d.mediaMode==='file'?'block':'none'}">
+      <div class="upload-box" id="uploadBox">
+        <div>🎵 Click to choose an audio or video file</div>
+        <div class="hint">MP3, WAV, M4A, MP4 or MOV — up to ${CONFIG.MAX_FILE_MB}MB</div>
+        <div class="fname" id="fname">${d.mediaFileName ? "Selected: "+d.mediaFileName : ""}</div>
+      </div>
+      <input type="file" id="fileInput" accept="audio/*,video/*" style="display:none">
+    </div>
+
+    <div id="mediaLinkZone" style="display:${d.mediaMode==='link'?'block':'none'}">
+      ${field("Link to your recording", `<input type="text" id="f_link" placeholder="YouTube, Google Drive, Dropbox..." value="${escAttr(d.mediaLink)}">`, "Make sure the sharing setting allows anyone with the link to view it.", "", errs)}
+    </div>
+    ${errs.media?`<div class="error-text">${errs.media}</div>`:""}
+    ${navButtons(true)}
+  `;
+  document.getElementById("modeFileBtn").onclick = ()=>{ d.mediaMode="file"; render(); };
+  document.getElementById("modeLinkBtn").onclick = ()=>{ d.mediaMode="link"; render(); };
+
+  if (d.mediaMode==="file"){
+    const box = document.getElementById("uploadBox");
+    const input = document.getElementById("fileInput");
+    box.onclick = ()=> input.click();
+    input.onchange = handleFile;
+    ["dragover","dragleave","drop"].forEach(evt=>{
+      box.addEventListener(evt, e=>{
+        e.preventDefault();
+        box.classList.toggle("dragover", evt==="dragover");
+        if (evt==="drop" && e.dataTransfer.files[0]) readFile(e.dataTransfer.files[0]);
+      });
+    });
+  } else {
+    bind("f_link","mediaLink");
+  }
+  wireNav();
+
+  function handleFile(e){ if (e.target.files[0]) readFile(e.target.files[0]); }
+  function readFile(file){
+    if (file.size > CONFIG.MAX_FILE_MB*1024*1024){
+      alert(`That file is larger than ${CONFIG.MAX_FILE_MB}MB. Please choose a shorter clip, or use "Paste a link instead".`);
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = ()=>{
+      d.mediaFile = file;
+      d.mediaFileName = file.name;
+      d.mediaFileType = file.type;
+      d.mediaFileBase64 = reader.result.split(",")[1];
+      document.getElementById("fname").textContent = "Selected: "+file.name;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+function renderReference(){
+  const d = state.data, errs = state._errs || {};
+  container.innerHTML = `
+    <h2>Reference &amp; agreement</h2>
+    <div class="sub">One person who can speak to your character — a pastor, small group leader, or mentor.</div>
+    ${field("Reference name", `<input type="text" id="f_refname" value="${escAttr(d.refName)}">`, "", "refName", errs)}
+    ${field("Reference phone or email", `<input type="text" id="f_refcontact" value="${escAttr(d.refContact)}">`, "", "refContact", errs)}
+    <div class="field">
+      <label>Team commitment</label>
+      <div class="agree-row">
+        <input type="checkbox" id="f_agree" ${d.agree?"checked":""}>
+        <span style="font-size:13.5px;line-height:1.55;color:var(--text)">${CONFIG.AGREEMENT_TEXT}</span>
+      </div>
+      ${errs.agree?`<div class="error-text">${errs.agree}</div>`:""}
+    </div>
+    ${navButtons(true)}
+  `;
+  bind("f_refname","refName"); bind("f_refcontact","refContact");
+  document.getElementById("f_agree").addEventListener("change", e=> d.agree = e.target.checked);
+  wireNav();
+}
+
+function renderSchedule(){
+  const errs = state._errs || {};
+  container.innerHTML = `<h2>Request an audition day and time</h2><div class="sub">Loading available times…</div>`;
+  fetchSlots().then(slots=>{
+    state.slots = slots;
+    const byDate = {};
+    slots.forEach(s=>{ (byDate[s.date] = byDate[s.date]||[]).push(s); });
+    const dates = Object.keys(byDate).sort();
+    container.innerHTML = `
+      <h2>Request an audition day and time</h2>
+      <div class="sub">These are the only times we currently have open — choose whichever works best.</div>
+      ${dates.length===0 ? `<div class="slot-empty">No audition times are open right now. Please contact ${CONFIG.CONTACT_EMAIL} to arrange a time.</div>` : ""}
+      ${dates.map(date=>`
+        <div class="slot-date-group">
+          <h3>${formatDateLabel(date)}</h3>
+          <div class="slot-list">
+            ${byDate[date].map(s=>`<button type="button" class="slot-btn ${state.data.slot && state.data.slot.id===s.id?'selected':''}" data-id="${s.id}">${s.time}</button>`).join("")}
+          </div>
+        </div>
+      `).join("")}
+      ${errs.slot?`<div class="error-text">${errs.slot}</div>`:""}
+      ${navButtons(true)}
+    `;
+    container.querySelectorAll(".slot-btn").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const chosen = slots.find(s=>s.id===btn.dataset.id);
+        state.data.slot = chosen;
+        container.querySelectorAll(".slot-btn").forEach(b=>b.classList.remove("selected"));
+        btn.classList.add("selected");
+      });
+    });
+    wireNav();
+  }).catch(err=>{
+    container.innerHTML = `<h2>Request an audition day and time</h2><div class="error-text">Couldn't load audition times: ${err.message}</div>${navButtons(true)}`;
+    wireNav();
+  });
+}
+
+function renderReview(){
+  const d = state.data;
+  container.innerHTML = `
+    <h2>Review your application</h2>
+    <div class="sub">Take a look before you submit.</div>
+    <div class="summary-block"><h4>Contact</h4><p>${escHtml(d.name)} — ${escHtml(d.email)} — ${escHtml(d.phone)}</p></div>
+    <div class="summary-block"><h4>Role(s)</h4><p>${d.roles.map(escHtml).join(", ")}</p></div>
+    <div class="summary-block"><h4>Recording</h4><p>${d.mediaMode==="file" ? "📎 "+escHtml(d.mediaFileName) : "🔗 "+escHtml(d.mediaLink)}</p></div>
+    <div class="summary-block"><h4>Reference</h4><p>${escHtml(d.refName)} — ${escHtml(d.refContact)}</p></div>
+    <div class="summary-block"><h4>Audition time</h4><p>${d.slot ? formatDateLabel(d.slot.date)+" at "+d.slot.time : "—"}</p></div>
+    <div class="actions">
+      <button class="btn btn-ghost" id="backBtn">Back</button>
+      <button class="btn btn-primary" id="submitBtn" ${state.submitting?"disabled":""}>${state.submitting?'<span class="spinner"></span>Submitting…':'Submit application'}</button>
+    </div>
+  `;
+  document.getElementById("backBtn").onclick = ()=>{ state.step--; render(); };
+  document.getElementById("submitBtn").onclick = doSubmit;
+}
+
+function renderConfirmation(){
+  const d = state.data;
+  const r = state.bookingResult;
+  container.innerHTML = `
+    <div class="confirm">
+      <div class="icon">🎉</div>
+      <h2>You're all set, ${escHtml(d.name.split(" ")[0]||"")}!</h2>
+      <p>Thanks for applying to serve with ${CONFIG.CHURCH_NAME}'s worship team. We've received your application and recording.</p>
+      ${r && r.slot ? `<div class="slot-echo">Audition: ${formatDateLabel(r.slot.date)} at ${r.slot.time}</div>` : ""}
+      <p style="margin-top:18px;">A confirmation will be sent to ${escHtml(d.email)}. Questions in the meantime? Reach us at ${CONFIG.CONTACT_EMAIL}.</p>
+    </div>
+  `;
+}
+
+/* ==========================================================
+   6. HELPERS
+   ========================================================== */
+function checkItem(kind,val,checked){
+  return `<label class="check-item ${checked?'checked':''}">
+    <input type="checkbox" data-${kind}="${escAttr(val)}" ${checked?"checked":""}>
+    <span>${escHtml(val)}</span>
+  </label>`;
+}
+function bind(id,key){
+  const el = document.getElementById(id);
+  el.addEventListener("input", e=> state.data[key] = e.target.value);
+}
+function navButtons(showBack){
+  return `<div class="actions">
+    ${showBack ? `<button class="btn btn-ghost" id="backBtn">Back</button>` : `<span></span>`}
+    <button class="btn btn-primary" id="nextBtn">Continue</button>
+  </div>`;
+}
+function wireNav(){
+  const back = document.getElementById("backBtn");
+  const next = document.getElementById("nextBtn");
+  if (back) back.onclick = ()=>{ state.step--; state._errs=null; render(); };
+  if (next) next.onclick = ()=>{
+    const errs = validateStep(state.step);
+    if (Object.keys(errs).length){ state._errs = errs; render(); return; }
+    state._errs = null;
+    state.step++;
+    render();
+  };
+}
+function formatTextBlock(text){
+  const lines = String(text||"").split("\n").map(l=>l.trim()).filter(l=>l.length);
+  let html = "", inList = false;
+  lines.forEach(line=>{
+    if (line.startsWith("*")){
+      if (!inList){ html += "<ul>"; inList = true; }
+      html += `<li>${escHtml(line.slice(1).trim())}</li>`;
+    } else {
+      if (inList){ html += "</ul>"; inList = false; }
+      const isHeading = line === line.toUpperCase() && /[A-Z]/.test(line);
+      html += isHeading ? `<h4>${escHtml(line)}</h4>` : `<p>${escHtml(line)}</p>`;
+    }
+  });
+  if (inList) html += "</ul>";
+  return html;
+}
+function escHtml(s){ return String(s||"").replace(/[&<>]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])); }
+function escAttr(s){ return escHtml(s).replace(/"/g,"&quot;"); }
+function formatDateLabel(iso){
+  const dt = new Date(iso+"T00:00:00");
+  return dt.toLocaleDateString(undefined, {weekday:"long", month:"long", day:"numeric"});
+}
+
+async function doSubmit(){
+  state.submitting = true; render(); state.step = 8; // stay on review while submitting
+  document.getElementById("submitBtn").disabled = true;
+  document.getElementById("submitBtn").innerHTML = '<span class="spinner"></span>Submitting…';
+  const d = state.data;
+  const payload = {
+    action: "submit_application",
+    name:d.name, email:d.email, phone:d.phone, age:d.age, membershipStatus:d.membershipStatus, smallGroup:d.smallGroup,
+    roles:d.roles.join(", "), experience:d.experience, instruments:d.instruments, training:d.training,
+    faithAnswer:d.faithAnswer, whyJoin:d.whyJoin, previousChurch:d.previousChurch,
+    availability:d.availability, conflicts:d.conflicts,
+    refName:d.refName, refContact:d.refContact,
+    mediaLink: d.mediaMode==="link" ? d.mediaLink : "",
+    mediaFileName: d.mediaMode==="file" ? d.mediaFileName : "",
+    mediaFileType: d.mediaMode==="file" ? d.mediaFileType : "",
+    mediaFileBase64: d.mediaMode==="file" ? d.mediaFileBase64 : "",
+    slot: d.slot
+  };
+  try{
+    const result = await submitApplication(payload);
+    state.submitting = false;
+    if (result.success){
+      state.bookingResult = result;
+      state.submitted = true;
+      render();
+    } else if (result.error === "slot_taken") {
+      alert("Sorry — that time was just booked by someone else. Please pick another.");
+      state.data.slot = null;
+      state.step = 7;
+      render();
+    } else {
+      alert("Something went wrong submitting your application: " + (result.error || "unknown error"));
+      render();
+    }
+  }catch(err){
+    state.submitting = false;
+    alert("Couldn't reach the server: " + err.message);
+    render();
+  }
+}
+
+render();
+</script>
+</body>
+</html>
