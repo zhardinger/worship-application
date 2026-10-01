@@ -184,7 +184,7 @@ const CONFIG = {
   // (see the setup guide). Leave the placeholder in and the page
   // will run in local "demo mode" with fake slots, so you can test
   // the flow before your backend is ready.
-  BACKEND_URL: "https://script.google.com/macros/s/AKfycbyR3SpHC06odd1U-37wrPHEAIxUBV0QFSdpjpStwYrkSKy5LfGpkj2ZIqIWnX76hkZdrg/exec",
+  BACKEND_URL: "https://script.google.com/macros/s/AKfycbwsbJHhUt7eT7CPcwHhthOenyK1afwTyU18jmgsmBRblhdT4tWEbAw9FMTRY1SwkB88/exec",
 
   CHURCH_NAME: "Wills Valley Community Church",
   CONTACT_EMAIL: "kshrad@yahoo.com",
@@ -198,7 +198,7 @@ const CONFIG = {
 
   // Max upload size before we ask the applicant to paste a link instead.
   // Kept modest because the file travels as base64 text to the backend.
-  MAX_FILE_MB: 8,
+  MAX_FILE_MB: 25,
 
   // Required reading shown on the very first screen. Applicants must
   // check a box confirming they've read both before they can continue.
@@ -456,24 +456,24 @@ function renderMedia(){
   const d = state.data, errs = state._errs || {};
   container.innerHTML = `
     <h2>Share a recording</h2>
-    <div class="sub">Upload a 1–3 minute clip of yourself singing or playing, or paste a link if your file is large.</div>
+    <div class="sub">Upload a 1–3 minute audio clip of yourself singing or playing. <strong>If you'd like to share a video, please paste a link instead</strong> — video files can't be uploaded directly here.</div>
 
     <div class="check-grid" style="margin-bottom:16px;">
-      <div class="check-item ${d.mediaMode==='file'?'checked':''}" id="modeFileBtn"><span>🎙️ Upload a file</span></div>
-      <div class="check-item ${d.mediaMode==='link'?'checked':''}" id="modeLinkBtn"><span>🔗 Paste a link instead</span></div>
+      <div class="check-item ${d.mediaMode==='file'?'checked':''}" id="modeFileBtn"><span>🎙️ Upload an audio file</span></div>
+      <div class="check-item ${d.mediaMode==='link'?'checked':''}" id="modeLinkBtn"><span>🔗 Paste a link (required for video)</span></div>
     </div>
 
     <div id="mediaFileZone" style="display:${d.mediaMode==='file'?'block':'none'}">
       <div class="upload-box" id="uploadBox">
-        <div>🎵 Click to choose an audio or video file</div>
-        <div class="hint">MP3, WAV, M4A, MP4 or MOV — up to ${CONFIG.MAX_FILE_MB}MB</div>
+        <div>🎵 Click to choose an audio file</div>
+        <div class="hint">MP3, WAV, or M4A — up to ${CONFIG.MAX_FILE_MB}MB. For video, use "Paste a link" above instead.</div>
         <div class="fname" id="fname">${d.mediaFileName ? "Selected: "+d.mediaFileName : ""}</div>
       </div>
-      <input type="file" id="fileInput" accept="audio/*,video/*" style="display:none">
+      <input type="file" id="fileInput" accept="audio/*" style="display:none">
     </div>
 
     <div id="mediaLinkZone" style="display:${d.mediaMode==='link'?'block':'none'}">
-      ${field("Link to your recording", `<input type="text" id="f_link" placeholder="YouTube, Google Drive, Dropbox..." value="${escAttr(d.mediaLink)}">`, "Make sure the sharing setting allows anyone with the link to view it.", "", errs)}
+      ${field("Link to your recording", `<input type="text" id="f_link" placeholder="YouTube, Google Drive, Dropbox..." value="${escAttr(d.mediaLink)}">`, "Make sure the sharing setting allows anyone with the link to view it. This is the required option for video.", "", errs)}
     </div>
     ${errs.media?`<div class="error-text">${errs.media}</div>`:""}
     ${navButtons(true)}
@@ -500,6 +500,10 @@ function renderMedia(){
 
   function handleFile(e){ if (e.target.files[0]) readFile(e.target.files[0]); }
   function readFile(file){
+    if (file.type && !file.type.startsWith("audio/")){
+      alert(`This upload is for audio files only. For a video recording, please switch to "Paste a link" above instead.`);
+      return;
+    }
     if (file.size > CONFIG.MAX_FILE_MB*1024*1024){
       alert(`That file is larger than ${CONFIG.MAX_FILE_MB}MB. Please choose a shorter clip, or use "Paste a link instead".`);
       return;
